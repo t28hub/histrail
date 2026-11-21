@@ -1,0 +1,35 @@
+# Rust
+/target/
+**/*.rs.bk
+
+# Coverage
+coverage/
+lcov.info
+codecov.json
+
+# Node.js
+node_modules/
+dist/
+pnpm-debug.log*
+*.tsbuildinfo
+
+# IntelliJ IDEA
+.idea/
+.idea_modules/
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+
+# Secrets
+.env
+.env.*
+secrets/
+.claude/settings.local.json
+
+# Misc
+.DS_Store
+*.sw?
