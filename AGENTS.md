@@ -6,10 +6,12 @@ them on the user's machine; the GUI, the CLI and an MCP server search them.
 Nothing leaves the machine.
 
 > **Status: planned, not yet implemented.** The repository does not contain
-> the layout, files or `just` recipes described below yet (no `crates/`,
-> `apps/`, `packages/`, `fixtures/`, `docs/`, `justfile` or workspace
-> manifests). Treat them as the target structure, not as something to look
-> up. Remove this note once the code lands.
+> the layout and files described below yet (no `crates/`, `apps/`,
+> `packages/`, `fixtures/`, `docs/` or workspace manifests). The `.justfile`
+> defines every recipe, but `gen`, `gen-check`, `e2e`, `eval`, `bench` and
+> `guard` fail with "not implemented yet" until their tooling exists, so
+> `just verify` cannot pass. Treat the layout as the target structure, not
+> as something to look up. Remove this note once the code lands.
 
 - Design: `docs/design/` — read the relevant section before changing a
   subsystem. It is exported from the design doc; do not edit it here.
