@@ -6,8 +6,9 @@ them on the user's machine; the GUI, the CLI and an MCP server search them.
 Nothing leaves the machine.
 
 > **Status: planned, not yet implemented.** The repository does not contain
-> the layout and files described below yet (no `crates/`, `apps/`,
-> `packages/`, `fixtures/`, `docs/` or workspace manifests). The `.justfile`
+> most of the layout and files described below yet. The Cargo workspace has
+> only `histrail-protocol` and `histrail-core`, both empty; there is no
+> `apps/`, `packages/`, `fixtures/`, `docs/` or pnpm workspace. The `.justfile`
 > defines every recipe, but `gen`, `gen-check`, `e2e`, `eval`, `bench` and
 > `guard` fail with "not implemented yet" until their tooling exists, so
 > `just verify` cannot pass. Treat the layout as the target structure, not
