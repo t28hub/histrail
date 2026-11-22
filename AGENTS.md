@@ -13,11 +13,20 @@ Nothing leaves the machine.
 > defines every recipe, but `gen`, `gen-check`, `e2e`, `eval`, `bench` and
 > `guard` fail with "not implemented yet" until their tooling exists, so
 > `just verify` cannot pass. Treat the layout as the target structure, not
-> as something to look up. Remove this note once the code lands.
+> as something to look up. Until `docs/design/` exists, the task is the
+> whole spec. Remove this note once the code lands.
 
-- Design: `docs/design/` — read the relevant section before changing a
-  subsystem. It is exported from the design doc; do not edit it here.
-- Decisions not covered by the design: one line each in `docs/decisions.md`.
+- The spec is `docs/design/` plus the task. Read the relevant design section
+  first. `docs/design/` is an export; do not edit it.
+- Ask instead of deciding when the task conflicts with the spec, needs a new
+  permission or network access, or leaves open something visible outside the
+  crate or package: dependencies, formats, limits and defaults, public API,
+  CLI or UI behavior. Private names and structure are yours.
+- Ask with the options you compared and a recommendation based on official
+  docs, ecosystem conventions and established open-source projects; say which
+  you checked. Record the answer in the PR's Notes.
+- Only when no human can answer during the run, finish what does not depend
+  on the question and open a draft PR with it under "Design questions".
 
 ## Commands
 
@@ -150,8 +159,8 @@ on `protocol`. External clients reach core only through RPC.
 ## Dependencies
 
 - Histrail is MIT. `cargo deny check` must pass; no GPL or AGPL.
-- Prefer crates the design already names. Explain any other new dependency
-  in the PR.
+- Prefer crates the design already names. Any other new dependency needs
+  approval; explain it in the PR.
 - Do not copy code from other projects without checking its license and
   noting the source.
 - Change the lockfile only for the dependency you need
@@ -186,6 +195,3 @@ on `protocol`. External clients reach core only through RPC.
 - Fill in `.github/PULL_REQUEST_TEMPLATE.md` for the PR body and pass it with
   `gh pr create --body-file`. Keep every heading; write "None" instead of
   deleting a section.
-- Stop and ask instead of guessing when the request conflicts with
-  `docs/design/`, needs a decision the design does not cover, or needs a new
-  dependency, permission or network access.
