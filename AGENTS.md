@@ -7,8 +7,9 @@ Nothing leaves the machine.
 
 > **Status: planned, not yet implemented.** The repository does not contain
 > most of the layout and files described below yet. The Cargo workspace has
-> only `histrail-protocol` and `histrail-core`, both empty; there is no
-> `apps/`, `packages/`, `fixtures/`, `docs/` or pnpm workspace. The `.justfile`
+> only `histrail-protocol` and `histrail-core`, both empty. The pnpm workspace
+> has only the root, with no packages; there is no `apps/`, `packages/`,
+> `fixtures/` or `docs/`. The `.justfile`
 > defines every recipe, but `gen`, `gen-check`, `e2e`, `eval`, `bench` and
 > `guard` fail with "not implemented yet" until their tooling exists, so
 > `just verify` cannot pass. Treat the layout as the target structure, not
@@ -24,8 +25,8 @@ Everything runs through `just`; CI runs the same recipes.
 
 | Command | What it does |
 |---|---|
-| `just fmt` | `cargo fmt` and prettier |
-| `just lint` | `cargo clippy -- -D warnings`, eslint, `tsc --noEmit` |
+| `just fmt` | `cargo fmt` and `biome format` |
+| `just lint` | `cargo clippy -- -D warnings`, `biome check` (lint and assists), `tsc --noEmit` |
 | `just test` | `cargo nextest run` and vitest |
 | `just gen` / `just gen-check` | Regenerate JSON Schema, OpenRPC and TS types from `histrail-protocol` / fail if stale |
 | `just e2e <suite>` | Playwright with the extension loaded into Chrome for Testing |

@@ -4,20 +4,20 @@
 default:
     @just --list
 
-# cargo fmt and prettier
+# cargo fmt and biome format
 fmt:
     cargo fmt --all
-    pnpm exec prettier --write .
+    pnpm exec biome format --write .
 
-# Fail if cargo fmt or prettier would change anything
+# Fail if cargo fmt or biome format would change anything
 fmt-check:
     cargo fmt --all --check
-    pnpm exec prettier --check .
+    pnpm exec biome format .
 
-# cargo clippy -D warnings, eslint, tsc --noEmit
+# cargo clippy -D warnings, biome lint and assists, tsc --noEmit
 lint:
     cargo clippy --workspace --all-targets -- -D warnings
-    pnpm exec eslint .
+    pnpm exec biome check --formatter-enabled=false .
     pnpm -r exec tsc --noEmit
 
 # cargo nextest and vitest
