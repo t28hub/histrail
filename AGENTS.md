@@ -25,8 +25,8 @@ Everything runs through `just`; CI runs the same recipes.
 
 | Command | What it does |
 |---|---|
-| `just fmt` | `cargo fmt` and `biome format` |
-| `just lint` | `cargo clippy -- -D warnings`, `biome check` (lint and assists), `tsc --noEmit` |
+| `just fmt` | `cargo fmt`, `biome format` and `tombi format` (TOML) |
+| `just lint` | `cargo clippy -- -D warnings`, `biome check` (lint and assists), `tombi lint`, `tsc --noEmit` |
 | `just test` | `cargo nextest run` and vitest |
 | `just gen` / `just gen-check` | Regenerate JSON Schema, OpenRPC and TS types from `histrail-protocol` / fail if stale |
 | `just e2e <suite>` | Playwright with the extension loaded into Chrome for Testing |

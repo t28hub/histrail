@@ -1,7 +1,7 @@
 [graph]
 all-features = true
 # Desktop targets Histrail ships for.
-targets = [
+targets      = [
   "aarch64-apple-darwin",
   "x86_64-apple-darwin",
   "x86_64-pc-windows-msvc",
@@ -25,10 +25,10 @@ allow = [
 ]
 
 [bans]
-wildcards = "deny"
+wildcards            = "deny"
 # Workspace crates depend on each other by path without a version.
 allow-wildcard-paths = true
 
 [sources]
 unknown-registry = "deny"
-unknown-git = "deny"
+unknown-git      = "deny"

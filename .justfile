@@ -4,20 +4,23 @@
 default:
     @just --list
 
-# cargo fmt and biome format
+# cargo fmt, biome format and tombi format
 fmt:
     cargo fmt --all
     pnpm exec biome format --write .
+    pnpm exec tombi format
 
-# Fail if cargo fmt or biome format would change anything
+# Fail if cargo fmt, biome format or tombi format would change anything
 fmt-check:
     cargo fmt --all --check
     pnpm exec biome format .
+    pnpm exec tombi format --check
 
-# cargo clippy -D warnings, biome lint and assists, tsc --noEmit
+# cargo clippy -D warnings, biome lint and assists, tombi lint, tsc --noEmit
 lint:
     cargo clippy --workspace --all-targets -- -D warnings
     pnpm exec biome check --formatter-enabled=false .
+    pnpm exec tombi lint
     pnpm -r exec tsc --noEmit
 
 # cargo nextest and vitest
