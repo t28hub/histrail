@@ -8,7 +8,7 @@ pre-commit:
 
     - name: biome
       glob: "*.{js,jsx,ts,tsx,mjs,cjs,mts,cts,json,jsonc,yaml,yml,css}"
-      run: pnpm exec biome format --write --no-errors-on-unmatched {staged_files}
+      run: pnpm exec biome check --write --linter-enabled=false --no-errors-on-unmatched {staged_files}
       stage_fixed: true
 
     - name: tombi
