@@ -21,7 +21,7 @@ lint:
     cargo clippy --workspace --all-targets -- -D warnings
     pnpm exec biome check --formatter-enabled=false .
     pnpm exec tombi lint
-    pnpm -r exec tsc --noEmit
+    pnpm -r --include-workspace-root exec tsc --noEmit
 
 # cargo nextest and vitest
 test:
