@@ -40,7 +40,7 @@ eval: (_todo "eval")
 # criterion benchmarks and perf limits
 bench: (_todo "bench")
 
-# License and advisory checks
+# Licenses, advisories, banned crates and dependency sources
 deny:
     cargo deny check
 
