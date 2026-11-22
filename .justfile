@@ -1,66 +1,126 @@
 # Recipes whose tooling does not exist yet fail instead of passing, so
 # `just verify` never reports green for a check that was never run.
 
-default:
-    @just --list
+# List available recipes
+_default:
+    @{{ just_executable() }} --justfile {{ justfile() }} --list --unsorted
 
-# Install the cargo tools and pnpm dependencies used by the recipes
+alias f := format
+alias l := lint
+alias t := test
+alias r := ready
+
+# Install development tools and dependencies
+[group('dev')]
 setup:
     cargo install --locked cargo-nextest@0.9.152 cargo-deny@0.22.0
     pnpm install
 
-# Start the desktop app in development mode
+# Start the desktop app
+[group('dev')]
 dev:
     pnpm -C apps/desktop tauri dev
 
-# Format all files and sort imports
-fmt:
+# Format all files
+[group('format')]
+format: format-rust format-ts format-toml
+
+# Format Rust files
+[group('format')]
+format-rust:
     cargo fmt --all
+
+# Format TypeScript, JSON, YAML and HTML files
+[group('format')]
+format-ts:
     pnpm exec biome check --write --linter-enabled=false .
+
+# Format TOML files
+[group('format')]
+format-toml:
     pnpm exec tombi format
 
-# Fail if `just fmt` would change anything
-fmt-check:
+# Check formatting of all files
+[group('check')]
+check: check-rust check-ts check-toml
+
+# Check formatting of Rust files
+[group('check')]
+check-rust:
     cargo fmt --all --check
+
+# Check formatting of TypeScript, JSON, YAML and HTML files
+[group('check')]
+check-ts:
     pnpm exec biome check --linter-enabled=false .
+
+# Check formatting of TOML files
+[group('check')]
+check-toml:
     pnpm exec tombi format --check
 
-# Lint Rust (warnings as errors), TypeScript and TOML; type-check TypeScript
-lint:
+# Lint all files
+[group('lint')]
+lint: lint-rust lint-ts lint-toml
+
+# Lint Rust files
+[group('lint')]
+lint-rust:
     cargo clippy --workspace --all-targets -- -D warnings
+
+# Lint and type-check TypeScript files
+[group('lint')]
+lint-ts:
     pnpm exec biome lint .
-    pnpm exec tombi lint
     pnpm -r --include-workspace-root exec tsc --noEmit
 
-# Run all Rust and TypeScript tests in the workspace
+# Lint TOML files
+[group('lint')]
+lint-toml:
+    pnpm exec tombi lint
+
+# Run all tests
+[group('test')]
 test:
     cargo nextest run --workspace
     pnpm -r test
 
-# Regenerate JSON Schema, OpenRPC and TypeScript types from histrail-protocol
+# Generate schemas and types from histrail-protocol
+[group('gen')]
 gen: (_todo "gen")
 
-# Fail if the generated files are stale
+# Check that generated files are up to date
+[group('gen')]
 gen-check: (_todo "gen-check")
 
-# Run one end-to-end suite with the extension loaded in Chrome for Testing
+# Run an end-to-end test suite
+[group('test')]
 e2e suite: (_todo "e2e " + suite)
 
-# Measure search quality against the baselines
+# Evaluate search quality
+[group('test')]
 eval: (_todo "eval")
 
-# Run the benchmarks; fail if a perf limit is exceeded
+# Run the benchmarks
+[group('test')]
 bench: (_todo "bench")
 
-# Check dependency licenses, security advisories, banned crates and sources
+# Check dependency licenses and advisories
+[group('ci')]
 deny:
     cargo deny check
 
-# Fail if tests, thresholds or snapshots were weakened
+# Check that tests were not weakened
+[group('ci')]
 guard: (_todo "guard")
 
-# Everything that must pass before a change is done
-verify: fmt-check lint test gen-check deny guard
+# Run all checks
+[group('ci')]
+verify: check lint test gen-check deny guard
+
+# Format all files and run all checks
+[group('ci')]
+ready: format verify
 
 _todo recipe:
     @echo "just {{ recipe }}: not implemented yet" >&2

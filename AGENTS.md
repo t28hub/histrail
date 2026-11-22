@@ -34,8 +34,9 @@ Everything runs through `just`; CI runs the same recipes.
 |---|---|
 | `just setup` | Install the cargo tools and pnpm dependencies the recipes need |
 | `just dev` | Start the desktop app in development mode |
-| `just fmt` / `just fmt-check` | Format all files and sort imports / fail if that would change anything |
-| `just lint` | Lint Rust (warnings as errors), TypeScript and TOML; type-check TypeScript |
+| `just format` / `just check` | Format all files and sort imports / check formatting and import order |
+| `just lint` | Lint all files (Rust warnings as errors) and type-check TypeScript |
+| `just format-<lang>` / `just check-<lang>` / `just lint-<lang>` | The same for one of `rust`, `ts` (also JSON, YAML and HTML) or `toml` |
 | `just test` | Run all Rust and TypeScript tests in the workspace |
 | `just gen` / `just gen-check` | Regenerate JSON Schema, OpenRPC and TypeScript types from `histrail-protocol` / fail if they are stale |
 | `just e2e <suite>` | Run one end-to-end suite with the extension loaded in Chrome for Testing |
@@ -43,7 +44,8 @@ Everything runs through `just`; CI runs the same recipes.
 | `just bench` | Run the benchmarks; fail if a perf limit is exceeded |
 | `just deny` | Check dependency licenses, security advisories, banned crates and sources |
 | `just guard` | Fail if tests, thresholds or snapshots were weakened |
-| `just verify` | Run fmt-check, lint, test, gen-check, deny and guard |
+| `just verify` | Run check, lint, test, gen-check, deny and guard |
+| `just ready` | Format all files, then run `just verify` |
 
 Finish with one `just verify` run; it must pass before any change is done, and
 it already covers the checks it lists, so do not run them separately as well.
