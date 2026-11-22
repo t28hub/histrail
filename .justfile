@@ -4,46 +4,46 @@
 default:
     @just --list
 
-# cargo fmt, biome format and assists (import sorting) and tombi format
+# Format all files and sort imports
 fmt:
     cargo fmt --all
     pnpm exec biome check --write --linter-enabled=false .
     pnpm exec tombi format
 
-# Fail if cargo fmt, biome format and assists or tombi format would change anything
+# Fail if `just fmt` would change anything
 fmt-check:
     cargo fmt --all --check
     pnpm exec biome check --linter-enabled=false .
     pnpm exec tombi format --check
 
-# cargo clippy -D warnings, biome lint, tombi lint, tsc --noEmit
+# Lint Rust (warnings as errors), TypeScript and TOML; type-check TypeScript
 lint:
     cargo clippy --workspace --all-targets -- -D warnings
     pnpm exec biome lint .
     pnpm exec tombi lint
     pnpm -r --include-workspace-root exec tsc --noEmit
 
-# cargo nextest and vitest
+# Run all Rust and TypeScript tests in the workspace
 test:
     cargo nextest run --workspace
     pnpm -r test
 
-# Regenerate JSON Schema, OpenRPC and TS types from histrail-protocol
+# Regenerate JSON Schema, OpenRPC and TypeScript types from histrail-protocol
 gen: (_todo "gen")
 
 # Fail if the generated files are stale
 gen-check: (_todo "gen-check")
 
-# Playwright with the extension loaded into Chrome for Testing
+# Run one end-to-end suite with the extension loaded in Chrome for Testing
 e2e suite: (_todo "e2e " + suite)
 
-# Search quality (Recall@10, MRR, nDCG@10) on fixtures/eval/
+# Measure search quality against the baselines
 eval: (_todo "eval")
 
-# criterion benchmarks and perf limits
+# Run the benchmarks; fail if a perf limit is exceeded
 bench: (_todo "bench")
 
-# Licenses, advisories, banned crates and dependency sources
+# Check dependency licenses, security advisories, banned crates and sources
 deny:
     cargo deny check
 

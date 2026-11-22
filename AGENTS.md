@@ -32,21 +32,23 @@ Nothing leaves the machine.
 
 Everything runs through `just`; CI runs the same recipes.
 
-| Command | What it does |
+| Command | Description |
 |---|---|
-| `just fmt` | `cargo fmt`, `biome check --write --linter-enabled=false` (format and import sorting) and `tombi format` (TOML) |
-| `just lint` | `cargo clippy -- -D warnings`, `biome lint`, `tombi lint`, `tsc --noEmit` |
-| `just test` | `cargo nextest run` and vitest |
-| `just gen` / `just gen-check` | Regenerate JSON Schema, OpenRPC and TS types from `histrail-protocol` / fail if stale |
-| `just e2e <suite>` | Playwright with the extension loaded into Chrome for Testing |
-| `just eval` | Search quality (Recall@10, MRR, nDCG@10) on `fixtures/eval/` |
-| `just bench` | criterion benchmarks and perf limits |
-| `just guard` | Fails if tests, thresholds or snapshots were weakened |
-| `just verify` | fmt-check, lint, test, gen-check, `cargo deny check`, guard |
+| `just fmt` / `just fmt-check` | Format all files and sort imports / fail if that would change anything |
+| `just lint` | Lint Rust (warnings as errors), TypeScript and TOML; type-check TypeScript |
+| `just test` | Run all Rust and TypeScript tests in the workspace |
+| `just gen` / `just gen-check` | Regenerate JSON Schema, OpenRPC and TypeScript types from `histrail-protocol` / fail if they are stale |
+| `just e2e <suite>` | Run one end-to-end suite with the extension loaded in Chrome for Testing |
+| `just eval` | Measure search quality against the baselines |
+| `just bench` | Run the benchmarks; fail if a perf limit is exceeded |
+| `just deny` | Check dependency licenses, security advisories, banned crates and sources |
+| `just guard` | Fail if tests, thresholds or snapshots were weakened |
+| `just verify` | Run fmt-check, lint, test, gen-check, deny and guard |
 
-`just verify` must pass before any change is done. `main` is kept green, so a
-failure is yours to fix; do not assume it was already there. Also run the
-check that covers what you touched:
+Finish with one `just verify` run; it must pass before any change is done, and
+it already covers the checks it lists, so do not run them separately as well.
+`main` is kept green, so a failure is yours to fix; do not assume it was
+already there. Also run the check that covers what you touched:
 
 | If you changed | Also run |
 |---|---|
@@ -55,8 +57,10 @@ check that covers what you touched:
 | `crates/proxy`, `crates/rpc`, `apps/extension` | `just e2e` for the affected suite |
 | ingest, search or store hot paths | `just bench` |
 
-Scope cargo to the crate you changed (`cargo nextest run -p histrail-store`);
-run the whole workspace only after touching `histrail-protocol` or `histrail-core`.
+While iterating, scope cargo to the crate you changed
+(`cargo nextest run -p histrail-store`,
+`cargo clippy -p histrail-store --all-targets -- -D warnings`); run the whole
+workspace only after touching `histrail-protocol` or `histrail-core`.
 One test: `cargo nextest run -p histrail-index -E 'test(<name>)'`.
 TypeScript: `pnpm -C apps/extension test`, `pnpm -C apps/desktop test`,
 `pnpm -C packages/ui test`. Do not build with `--release` or `tauri build`
@@ -158,7 +162,7 @@ on `protocol`. External clients reach core only through RPC.
 
 ## Dependencies
 
-- Histrail is MIT. `cargo deny check` must pass; no GPL or AGPL.
+- Histrail is MIT; no GPL or AGPL dependencies (`just deny` enforces this).
 - Prefer crates the design already names. Any other new dependency needs
   approval; explain it in the PR.
 - Do not copy code from other projects without checking its license and
