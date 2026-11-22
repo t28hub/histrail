@@ -4,6 +4,11 @@
 default:
     @just --list
 
+# Install the cargo tools and pnpm dependencies used by the recipes
+setup:
+    cargo install --locked cargo-nextest@0.9.152 cargo-deny@0.22.0
+    pnpm install
+
 # Start the desktop app in development mode
 dev:
     pnpm -C apps/desktop tauri dev

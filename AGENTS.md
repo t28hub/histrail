@@ -32,6 +32,7 @@ Everything runs through `just`; CI runs the same recipes.
 
 | Command | Description |
 |---|---|
+| `just setup` | Install the cargo tools and pnpm dependencies the recipes need |
 | `just dev` | Start the desktop app in development mode |
 | `just fmt` / `just fmt-check` | Format all files and sort imports / fail if that would change anything |
 | `just lint` | Lint Rust (warnings as errors), TypeScript and TOML; type-check TypeScript |
