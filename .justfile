@@ -4,6 +4,10 @@
 default:
     @just --list
 
+# Start the desktop app in development mode
+dev:
+    pnpm -C apps/desktop tauri dev
+
 # Format all files and sort imports
 fmt:
     cargo fmt --all

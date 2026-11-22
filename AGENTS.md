@@ -5,16 +5,14 @@ extension captures pages; a Rust desktop app (Tauri v2) stores and indexes
 them on the user's machine; the GUI, the CLI and an MCP server search them.
 Nothing leaves the machine.
 
-> **Status: planned, not yet implemented.** The repository does not contain
-> most of the layout and files described below yet. The Cargo workspace has
-> only `histrail-protocol` and `histrail-core`, both empty. The pnpm workspace
-> has only the root, with no packages; there is no `apps/`, `packages/`,
-> `fixtures/` or `docs/`. The `.justfile`
-> defines every recipe, but `gen`, `gen-check`, `e2e`, `eval`, `bench` and
-> `guard` fail with "not implemented yet" until their tooling exists, so
-> `just verify` cannot pass. Treat the layout as the target structure, not
-> as something to look up. Until `docs/design/` exists, the task is the
-> whole spec. Remove this note once the code lands.
+> **Status: partially implemented.** The Cargo workspace includes
+> `histrail-protocol`, `histrail-core` and `histrail-desktop` (`apps/desktop/src-tauri`).
+> The pnpm workspace includes the root and the desktop frontend (`apps/desktop`).
+> `packages/`, `fixtures/` and `docs/` do not exist yet.
+> The `.justfile` defines every recipe, but `gen`, `gen-check`, `e2e`, `eval`,
+> `bench` and `guard` fail with "not implemented yet" until their tooling exists,
+> so `just verify` cannot pass. The repository map below shows the target layout.
+> Until `docs/design/` exists, the task is the whole spec.
 
 - The spec is `docs/design/` plus the task. Read the relevant design section
   first. `docs/design/` is an export; do not edit it.
@@ -34,6 +32,7 @@ Everything runs through `just`; CI runs the same recipes.
 
 | Command | Description |
 |---|---|
+| `just dev` | Start the desktop app in development mode |
 | `just fmt` / `just fmt-check` | Format all files and sort imports / fail if that would change anything |
 | `just lint` | Lint Rust (warnings as errors), TypeScript and TOML; type-check TypeScript |
 | `just test` | Run all Rust and TypeScript tests in the workspace |

@@ -2,6 +2,9 @@
 /target/
 **/*.rs.bk
 
+# Tauri
+apps/desktop/src-tauri/gen/schemas/
+
 # Coverage
 coverage/
 lcov.info
@@ -9,6 +12,7 @@ codecov.json
 
 # Node.js
 node_modules/
+.pnpm-store/
 dist/
 pnpm-debug.log*
 *.tsbuildinfo
