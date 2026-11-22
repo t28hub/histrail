@@ -15,19 +15,20 @@ publish = false
 unsafe_code = "deny"
 
 [workspace.lints.clippy]
-# Silencing a lint must use `#[expect(lint, reason = "...")]`.
 allow_attributes = "deny"
 allow_attributes_without_reason = "deny"
+undocumented_unsafe_blocks = "deny"
+
 # Tests are exempted in .clippy.toml.
 expect_used = "deny"
 unwrap_used = "deny"
+
 # stdout is the protocol channel in `proxy` and `histrail mcp`; log with tracing.
 dbg_macro = "deny"
 print_stderr = "deny"
 print_stdout = "deny"
-undocumented_unsafe_blocks = "deny"
-# A new variant must fail to compile where it is matched. The second lint
-# covers a wildcard that stands for a single remaining variant, which the
-# first one skips.
+
+# A new variant must fail to compile where it is matched.
+# `wildcard_enum_match_arm` misses a wildcard covering a single remaining variant.
 match_wildcard_for_single_variants = "deny"
 wildcard_enum_match_arm = "deny"
