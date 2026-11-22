@@ -4,18 +4,34 @@ The desktop app for Histrail, a local search engine for your browsing history.
 
 ## Requirements
 
-The macOS app requires macOS 13.3 (Ventura) or later.
+- macOS 13.3 (Ventura) or later
 
 ## Development
 
-Install just, pnpm and Rust. On macOS, install the Xcode Command Line Tools.
-Run these commands from the repository root.
+### Prerequisites
+
+- [just](https://just.systems/)
+- [pnpm](https://pnpm.io/)
+- [Rust](https://rustup.rs/)
+- macOS: Xcode Command Line Tools
+- Debian or Ubuntu: `libwebkit2gtk-4.1-dev` and `libdbus-1-dev`
+- Other platforms: [Tauri prerequisites](https://v2.tauri.app/start/prerequisites/)
+
+### Running the app
+
+Run these commands from the repository root:
 
 ```sh
-pnpm install
+# Install the cargo tools and pnpm dependencies
+just setup
+
+# Start the app in development mode
 just dev
 ```
 
-To preview just the React UI in a browser, run `pnpm -C apps/desktop dev`.
+To preview only the UI in a browser, run `pnpm -C apps/desktop dev`.
 
-The React UI is in [`src/`](src/), and the Rust/Tauri app is in [`src-tauri/`](src-tauri/).
+## Layout
+
+- [`src/`](src/): the React UI.
+- [`src-tauri/`](src-tauri/): the Tauri app (`histrail-desktop`).
