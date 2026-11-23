@@ -5,6 +5,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Catch new advisories without a push.
+  schedule:
+    - cron: "0 0 * * 1"
 
 permissions:
   contents: read
