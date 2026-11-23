@@ -18,7 +18,7 @@ undocumented_unsafe_blocks      = "deny"
 expect_used = "deny"
 unwrap_used = "deny"
 
-# stdout is the protocol channel in `proxy` and `histrail mcp`; log with tracing.
+# stdout is the protocol channel in `proxy` and `histrail mcp`, so log with tracing.
 dbg_macro    = "deny"
 print_stderr = "deny"
 print_stdout = "deny"

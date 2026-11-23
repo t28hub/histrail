@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react()],
-  // Tauri's devUrl uses a fixed port; keep output so Rust errors stay visible.
+  // Tauri's devUrl uses a fixed port. Keep output so Rust errors stay visible.
   clearScreen: false,
   server: {
     port: 1420,

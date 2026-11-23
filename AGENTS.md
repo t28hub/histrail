@@ -1,8 +1,8 @@
 # AGENTS.md
 
 Histrail is a local search engine for everything you've browsed. A browser
-extension captures pages; a Rust desktop app (Tauri v2) stores and indexes
-them on the user's machine; the GUI, the CLI and an MCP server search them.
+extension captures pages, a Rust desktop app (Tauri v2) stores and indexes
+them on the user's machine, and the GUI, the CLI and an MCP server search them.
 Nothing leaves the machine.
 
 > **Status: partially implemented.** The Cargo workspace includes
@@ -16,20 +16,20 @@ Nothing leaves the machine.
 > Until `docs/design/` exists, the task is the whole spec.
 
 - The spec is `docs/design/` plus the task. Read the relevant design section
-  first. `docs/design/` is an export; do not edit it.
+  first. `docs/design/` is an export. Do not edit it.
 - Ask instead of deciding when the task conflicts with the spec, needs a new
   permission or network access, or leaves open something visible outside the
   crate or package: dependencies, formats, limits and defaults, public API,
   CLI or UI behavior. Private names and structure are yours.
 - Ask with the options you compared and a recommendation based on official
-  docs, ecosystem conventions and established open-source projects; say which
-  you checked. Record the answer in the PR's Notes.
+  docs, ecosystem conventions and established open-source projects, and say
+  which you checked. Record the answer in the PR's Notes.
 - Only when no human can answer during the run, finish what does not depend
   on the question and open a draft PR with it under "Design questions".
 
 ## Commands
 
-Everything runs through `just`; CI runs the same recipes.
+Everything runs through `just`, and CI runs the same recipes.
 
 | Command | Description |
 |---|---|
@@ -38,7 +38,7 @@ Everything runs through `just`; CI runs the same recipes.
 | `just format` / `just check` | Format all files / check formatting |
 | `just lint` | Lint all files and type-check TypeScript |
 | `just test` | Run all tests |
-| `just format-<lang>` / `just check-<lang>` / `just lint-<lang>` / `just test-<lang>` | The same for `rust`, `ts` (also JSON, YAML and HTML) or `toml`; `test-<lang>` has no `toml` |
+| `just format-<lang>` / `just check-<lang>` / `just lint-<lang>` / `just test-<lang>` | The same for `rust`, `ts` (also JSON, YAML and HTML) or `toml` (no `test-toml`) |
 | `just e2e <suite>` | Run one end-to-end suite |
 | `just eval` | Evaluate search quality |
 | `just bench` | Run the benchmarks |
@@ -48,9 +48,9 @@ Everything runs through `just`; CI runs the same recipes.
 | `just verify` | Run check, lint, test, gen-check, deny and guard |
 | `just ready` | Run format, then verify |
 
-Finish with one `just verify` run; it must pass before any change is done, and
+Finish with one `just verify` run. It must pass before any change is done, and
 it already covers the checks it lists, so do not run them separately as well.
-`main` is kept green, so a failure is yours to fix; do not assume it was
+`main` is kept green, so a failure is yours to fix. Do not assume it was
 already there. Also run the check that covers what you touched:
 
 | If you changed | Also run |
@@ -62,12 +62,12 @@ already there. Also run the check that covers what you touched:
 
 While iterating, scope cargo to the crate you changed
 (`cargo nextest run -p histrail-store`,
-`cargo clippy -p histrail-store --all-targets -- -D warnings`); run the whole
+`cargo clippy -p histrail-store --all-targets -- -D warnings`). Run the whole
 workspace only after touching `histrail-protocol` or `histrail-core`.
 One test: `cargo nextest run -p histrail-index -E 'test(<name>)'`.
 TypeScript: `pnpm -C apps/extension test`, `pnpm -C apps/desktop test`,
 `pnpm -C packages/ui test`. Do not build with `--release` or `tauri build`
-unless the task is about performance or packaging; they are slow.
+unless the task is about performance or packaging, because they are slow.
 
 ## Repository map
 
@@ -75,7 +75,7 @@ unless the task is about performance or packaging; they are slow.
 crates/                Rust libraries and Rust-only binaries
   protocol/            contract types: the single source of truth for every wire format
   core/                domain: ingest, rules, search, delete. No transport code
-  store/               SQLite + sqlite-vec; the only crate that writes to the DB
+  store/               SQLite + sqlite-vec, the only crate that writes to the DB
   index/               Tantivy + Lindera (Japanese) + bigram fields
   embedding/           ONNX Runtime embeddings and model management
   extract/             page captures -> typed records (builtin, declarative, WASM)
@@ -87,9 +87,9 @@ crates/                Rust libraries and Rust-only binaries
   test-support/        temp DBs, fixtures, fake clock (dev-dependency only)
 apps/                  what users install
   desktop/src/         desktop UI (TypeScript)
-  desktop/src-tauri/   Tauri shell (`histrail-desktop`); uses crates/cli as a library
+  desktop/src-tauri/   Tauri shell (`histrail-desktop`) using crates/cli as a library
   extension/           MV3 extension, built for Chromium and Firefox
-packages/              npm packages used by apps; direction is apps → ui → protocol
+packages/              npm packages used by apps (apps → ui → protocol)
   ui/                  @histrail/ui: UI components shared by the desktop UI and the extension
   protocol/            @histrail/protocol: generated from crates/protocol, never edit by hand
 fixtures/              synthetic pages, captures, imports, eval corpus
@@ -99,8 +99,8 @@ Package names are `histrail-<dir>` (`crates/store` → `histrail-store`),
 except `crates/cli`, which is `histrail`.
 
 Dependencies point one way: `protocol` ← `core` ← adapters (`rpc`, `mcp`, `http`,
-`cli`, `desktop`). `core` never depends on an adapter; `proxy` depends only
-on `protocol`. External clients reach core only through RPC.
+`cli`, `desktop`). `core` never depends on an adapter, and `proxy` depends
+only on `protocol`. External clients reach core only through RPC.
 
 ## Rules that break things if ignored
 
@@ -110,34 +110,34 @@ on `protocol`. External clients reach core only through RPC.
   Native Messaging frames and `--json` CLI output: removing or renaming needs
   a protocol version bump. Adding a case to a WIT `variant` bumps the package
   version (`histrail:extractor@0.x.0`).
-- **Migrations are append-only.** Schema changes go in a new migration;
-  never edit an existing one.
+- **Migrations are append-only.** Schema changes go in a new migration.
+  Never edit an existing one.
 - **One writer.** All DB writes go through the store's writer. Do not open
   extra write connections or block inside async code.
 - **Privacy.** Do not log page text, titles or full URLs above `debug` (log
-  record IDs). Never commit real browsing history, bookmarks or captures;
-  fixtures are synthetic. Do not add network calls.
+  record IDs). Never commit real browsing history, bookmarks or captures.
+  Fixtures are synthetic. Do not add network calls.
 - **Captured content is untrusted.** Pages, imported files and WASM extractors
   come from outside. Bound size and depth when parsing, never execute page
   content, and give WASM extractors nothing beyond the WIT interface. MCP
-  returns page text to other agents; a new MCP tool that changes data needs
-  approval.
+  returns page text to other agents, so a new MCP tool that changes data
+  needs approval.
 
 ## Rust
 
 - Workspace lints in `Cargo.toml` are authoritative. To silence one, use
   `#[expect(lint, reason = "...")]`, not `#[allow]`.
-- Libraries return `thiserror` errors; `anyhow` only in binaries.
+- Libraries return `thiserror` errors, and only binaries use `anyhow`.
 - No `unwrap()` / `expect()` outside tests. No `unsafe` except the sqlite-vec
   loader in `histrail-store`, with a `// SAFETY:` comment.
 - Log with `tracing`, never `println!`.
-- Match enums defined in this workspace exhaustively; no `_ =>` arms, so a
+- Match enums defined in this workspace exhaustively, without `_ =>` arms, so a
   new variant fails to compile where it matters. Do not mark them
   `#[non_exhaustive]`, which forces `_ =>` in other crates.
 - In tests, time and randomness come from `test-support` (fake clock, fixed seeds).
 - Code behind `cfg(windows)` or `cfg(target_os = "macos")` does not compile
   on Linux. Check Windows code with
-  `cargo xwin clippy --target x86_64-pc-windows-msvc`; macOS code is checked
+  `cargo xwin clippy --target x86_64-pc-windows-msvc`. macOS code is checked
   in CI. Say in the PR which targets you could not build.
 
 ## TypeScript
@@ -149,31 +149,31 @@ on `protocol`. External clients reach core only through RPC.
   approval.
 - The desktop UI talks to core only through the generated commands and types.
 - `packages/ui` is shared by both apps, so it never calls `chrome.*`, `browser.*`
-  or Tauri APIs; components get what they need through props.
+  or Tauri APIs. Components get what they need through props.
 
 ## Tests
 
 - `cargo nextest`, `insta` for golden output, `proptest` for invariants.
 - Add or update tests with every behavior change. A bug fix includes a test
-  that fails without the fix; run it once without the fix to see it fail.
+  that fails without the fix. Run it once without the fix to see it fail.
 - Review snapshots with `cargo insta review` and explain each diff. Never
   accept snapshots in bulk.
 - Never delete tests, add `#[ignore]` or lower thresholds to get green. Eval
   baselines (`fixtures/eval/`) and the perf limits checked by `just bench` are
-  set by humans; do not edit them.
+  set by humans, so do not edit them.
 - Tests never use the network or a real browser profile.
 
 ## Dependencies
 
-- Histrail is MIT; no GPL or AGPL dependencies (`just deny` enforces this).
+- Histrail is MIT, so no GPL or AGPL dependencies (`just deny` enforces this).
 - Prefer crates the design already names. Any other new dependency needs
-  approval; explain it in the PR.
+  approval. Explain it in the PR.
 - Do not copy code from other projects without checking its license and
   noting the source.
 - npm dependencies shared by packages go in the pnpm `catalog`, and others
   stay in the package's `package.json`.
 - Change the lockfile only for the dependency you need
-  (`cargo update -p <crate> --precise <version>`); never update everything.
+  (`cargo update -p <crate> --precise <version>`). Never update everything.
 
 ## Comments and text
 
@@ -187,10 +187,10 @@ on `protocol`. External clients reach core only through RPC.
 
 - Keep the diff to what was asked. No drive-by refactors or renames.
 - If the change makes this file wrong (a command, path or rule), fix this
-  file in the same PR. Do not add names of types or functions here; this
+  file in the same PR. Do not add names of types or functions here. This
   file holds rules, and the code holds names.
 - Do not add new rules to this file in a feature PR. Propose them under a
-  "Suggested AGENTS.md additions" heading in the PR body; a rule earns its
+  "Suggested AGENTS.md additions" heading in the PR body. A rule earns its
   place when agents got the same thing wrong more than once.
 - PRs are squash-merged, so the PR title becomes the commit on `main`.
   Titles follow Conventional Commits: `<type>(<scope>): <summary>`.
@@ -202,5 +202,5 @@ on `protocol`. External clients reach core only through RPC.
     - A breaking change gets `!` and a `BREAKING CHANGE:` footer in the PR
       body. Breaking `crates/protocol` is never done without asking first.
 - Fill in `.github/PULL_REQUEST_TEMPLATE.md` for the PR body and pass it with
-  `gh pr create --body-file`. Keep every heading; write "None" instead of
+  `gh pr create --body-file`. Keep every heading, and write "None" instead of
   deleting a section.
