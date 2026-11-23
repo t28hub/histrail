@@ -36,8 +36,8 @@ Everything runs through `just`; CI runs the same recipes.
 | `just dev` | Start the desktop app |
 | `just format` / `just check` | Format all files / check formatting |
 | `just lint` | Lint all files and type-check TypeScript |
-| `just format-<lang>` / `just check-<lang>` / `just lint-<lang>` | The same for `rust`, `ts` (also JSON, YAML and HTML) or `toml` |
 | `just test` | Run all tests |
+| `just format-<lang>` / `just check-<lang>` / `just lint-<lang>` / `just test-<lang>` | The same for `rust`, `ts` (also JSON, YAML and HTML) or `toml`; `test-<lang>` has no `toml` |
 | `just e2e <suite>` | Run one end-to-end suite |
 | `just eval` | Evaluate search quality |
 | `just bench` | Run the benchmarks |

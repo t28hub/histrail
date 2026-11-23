@@ -81,8 +81,16 @@ lint-toml:
 
 # Run all tests
 [group('test')]
-test:
+test: test-rust test-ts
+
+# Run Rust tests
+[group('test')]
+test-rust:
     cargo nextest run --workspace
+
+# Run TypeScript tests
+[group('test')]
+test-ts:
     pnpm -r test
 
 # Generate schemas and types from histrail-protocol
