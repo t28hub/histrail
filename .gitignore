@@ -5,6 +5,10 @@
 # Tauri
 apps/desktop/src-tauri/gen/schemas/
 
+# WXT
+.output/
+.wxt/
+
 # Coverage
 coverage/
 lcov.info

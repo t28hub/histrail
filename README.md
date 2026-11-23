@@ -15,7 +15,10 @@ cd histrail
 just setup
 
 # Start the desktop app in dev mode
-just dev
+just dev-desktop
+
+# Start the browser extension for Chrome in dev mode
+just dev-extension-chrome
 ```
 
 Run `just` to list all recipes.

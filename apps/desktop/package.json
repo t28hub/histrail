@@ -1,6 +1,6 @@
 {
   "name": "@histrail/desktop",
-  "description": "Histrail desktop app.",
+  "description": "Desktop app for Histrail.",
   "private": true,
   "version": "0.1.0",
   "license": "MIT",

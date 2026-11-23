@@ -26,7 +26,7 @@ Run these commands from the repository root:
 just setup
 
 # Start the desktop app in dev mode
-just dev
+just dev-desktop
 ```
 
 To preview only the UI in a browser, run `pnpm -C apps/desktop dev`.

@@ -7,7 +7,8 @@ Nothing leaves the machine.
 
 > **Status: partially implemented.** The Cargo workspace includes
 > `histrail-protocol`, `histrail-core` and `histrail-desktop` (`apps/desktop/src-tauri`).
-> The pnpm workspace includes the root and the desktop frontend (`apps/desktop`).
+> The pnpm workspace includes the root, the desktop frontend (`apps/desktop`)
+> and the browser extension (`apps/extension`).
 > `packages/`, `fixtures/` and `docs/` do not exist yet.
 > The `.justfile` defines every recipe, but `gen`, `gen-check`, `e2e`, `eval`,
 > `bench` and `guard` fail with "not implemented yet" until their tooling exists,
@@ -33,7 +34,7 @@ Everything runs through `just`; CI runs the same recipes.
 | Command | Description |
 |---|---|
 | `just setup` | Install development tools and dependencies |
-| `just dev` | Start the desktop app |
+| `just dev-desktop` / `just dev-extension-<browser>` | Start the desktop app / the browser extension for `chrome` or `firefox` |
 | `just format` / `just check` | Format all files / check formatting |
 | `just lint` | Lint all files and type-check TypeScript |
 | `just test` | Run all tests |

@@ -18,8 +18,18 @@ setup:
 
 # Start the desktop app
 [group('dev')]
-dev:
+dev-desktop:
     pnpm -C apps/desktop tauri dev
+
+# Start the browser extension for Chrome
+[group('dev')]
+dev-extension-chrome:
+    pnpm -C apps/extension dev
+
+# Start the browser extension for Firefox
+[group('dev')]
+dev-extension-firefox:
+    pnpm -C apps/extension dev:firefox
 
 # Format all files
 [group('format')]
