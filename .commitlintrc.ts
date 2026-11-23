@@ -17,7 +17,6 @@ export default {
       ['build', 'chore', 'ci', 'docs', 'feat', 'fix', 'perf', 'refactor', 'test'],
     ],
     'scope-enum': [RuleConfigSeverity.Error, 'always', scopes],
-    'subject-case': [RuleConfigSeverity.Error, 'always', 'lower-case'],
     'body-empty': [RuleConfigSeverity.Error, 'always'],
     'footer-empty': [RuleConfigSeverity.Error, 'always'],
   },
