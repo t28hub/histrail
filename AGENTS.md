@@ -170,6 +170,8 @@ on `protocol`. External clients reach core only through RPC.
   approval; explain it in the PR.
 - Do not copy code from other projects without checking its license and
   noting the source.
+- npm dependencies shared by packages go in the pnpm `catalog`, and others
+  stay in the package's `package.json`.
 - Change the lockfile only for the dependency you need
   (`cargo update -p <crate> --precise <version>`); never update everything.
 
