@@ -2,7 +2,23 @@
 
 > A local search engine for everything you’ve browsed.
 
-See the [desktop app README](apps/desktop/README.md) for system requirements and local development.
+## Development
+
+Install the [prerequisites](apps/desktop/README.md#prerequisites), then run:
+
+```sh
+# Clone the repository
+git clone https://github.com/t28hub/histrail.git
+cd histrail
+
+# Install tools and dependencies
+just setup
+
+# Start the desktop app in dev mode
+just dev
+```
+
+Run `just` to list all recipes.
 
 ## License
 

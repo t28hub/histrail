@@ -22,10 +22,10 @@ The desktop app for Histrail, a local search engine for your browsing history.
 Run these commands from the repository root:
 
 ```sh
-# Install the cargo tools and pnpm dependencies
+# Install tools and dependencies
 just setup
 
-# Start the app in development mode
+# Start the desktop app in dev mode
 just dev
 ```
 
