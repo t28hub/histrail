@@ -18,6 +18,7 @@
     "react-dom": "catalog:"
   },
   "devDependencies": {
+    "@histrail/tsconfig": "workspace:*",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@wxt-dev/module-react": "1.2.2",

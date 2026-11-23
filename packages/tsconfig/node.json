@@ -1,0 +1,4 @@
+{
+  "$schema": "https://www.schemastore.org/tsconfig",
+  "extends": ["@tsconfig/node26/tsconfig.json", "@tsconfig/strictest/tsconfig.json"]
+}

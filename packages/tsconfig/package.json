@@ -1,0 +1,16 @@
+{
+  "name": "@histrail/tsconfig",
+  "description": "Shared TypeScript configs for Histrail.",
+  "private": true,
+  "version": "0.1.0",
+  "license": "MIT",
+  "exports": {
+    "./node": "./node.json",
+    "./react": "./react.json"
+  },
+  "dependencies": {
+    "@tsconfig/node26": "26.0.2",
+    "@tsconfig/strictest": "2.0.9",
+    "@tsconfig/vite-react": "8.1.2"
+  }
+}

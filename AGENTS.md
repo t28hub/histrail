@@ -7,9 +7,9 @@ Nothing leaves the machine.
 
 > **Status: partially implemented.** The Cargo workspace includes
 > `histrail-protocol`, `histrail-core` and `histrail-desktop` (`apps/desktop/src-tauri`).
-> The pnpm workspace includes the root, the desktop frontend (`apps/desktop`)
-> and the browser extension (`apps/extension`).
-> `packages/`, `fixtures/` and `docs/` do not exist yet.
+> The pnpm workspace includes the root, the desktop frontend (`apps/desktop`),
+> the browser extension (`apps/extension`) and the shared TypeScript configs
+> (`packages/tsconfig`). `fixtures/` and `docs/` do not exist yet.
 > The `.justfile` defines every recipe, but `gen`, `gen-check`, `e2e`, `eval`,
 > `bench` and `guard` fail with "not implemented yet" until their tooling exists,
 > so `just verify` cannot pass. The repository map below shows the target layout.
@@ -92,6 +92,7 @@ apps/                  what users install
 packages/              npm packages used by apps (apps → ui → protocol)
   ui/                  @histrail/ui: UI components shared by the desktop UI and the extension
   protocol/            @histrail/protocol: generated from crates/protocol, never edit by hand
+  tsconfig/            @histrail/tsconfig: TypeScript configs extended by every package
 fixtures/              synthetic pages, captures, imports, eval corpus
 ```
 
@@ -142,7 +143,7 @@ only on `protocol`. External clients reach core only through RPC.
 
 ## TypeScript
 
-- pnpm, strict mode, vitest. Every package extends the root `tsconfig.base.json`.
+- pnpm, strict mode, vitest. Every package extends a config from `@histrail/tsconfig`.
 - Browser differences live only in `apps/extension/src/platform/`. Shared
   code does not call `chrome.*` or `browser.*` directly.
 - MV3: no remote code, no `eval`. New manifest or host permissions need
