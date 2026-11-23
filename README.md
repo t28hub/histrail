@@ -1,5 +1,7 @@
 # Histrail
 
+[![CI](https://github.com/t28hub/histrail/actions/workflows/ci.yml/badge.svg)](https://github.com/t28hub/histrail/actions/workflows/ci.yml)
+
 > A local search engine for everything you’ve browsed.
 
 ## Development
