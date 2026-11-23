@@ -15,6 +15,7 @@ concurrency:
 
 env:
   CARGO_TERM_COLOR: always
+  JUST_VERSION: 1.59.0
 
 jobs:
   check-fmt:
@@ -37,13 +38,13 @@ jobs:
       - name: Install just
         uses: taiki-e/install-action@v2.90.5
         with:
-          tool: just@1.46.0
+          tool: just@${{ env.JUST_VERSION }}
 
       - name: Check formatting
         run: just check
 
   check-lint:
-    name: check | lint (${{ matrix.os }})
+    name: check | lint
     strategy:
       fail-fast: false
       matrix:
@@ -75,7 +76,7 @@ jobs:
       - name: Install just
         uses: taiki-e/install-action@v2.90.5
         with:
-          tool: just@1.46.0
+          tool: just@${{ env.JUST_VERSION }}
 
       - name: Lint
         run: just lint
@@ -94,7 +95,7 @@ jobs:
       - name: Install just and cargo-deny
         uses: taiki-e/install-action@v2.90.5
         with:
-          tool: just@1.46.0,cargo-deny@0.22.0
+          tool: just@${{ env.JUST_VERSION }},cargo-deny@0.22.0
 
       - name: Check dependency licenses and advisories
         run: just deny
