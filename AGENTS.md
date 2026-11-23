@@ -32,20 +32,20 @@ Everything runs through `just`; CI runs the same recipes.
 
 | Command | Description |
 |---|---|
-| `just setup` | Install the cargo tools and pnpm dependencies the recipes need |
-| `just dev` | Start the desktop app in development mode |
-| `just format` / `just check` | Format all files and sort imports / check formatting and import order |
-| `just lint` | Lint all files (Rust warnings as errors) and type-check TypeScript |
-| `just format-<lang>` / `just check-<lang>` / `just lint-<lang>` | The same for one of `rust`, `ts` (also JSON, YAML and HTML) or `toml` |
-| `just test` | Run all Rust and TypeScript tests in the workspace |
-| `just gen` / `just gen-check` | Regenerate JSON Schema, OpenRPC and TypeScript types from `histrail-protocol` / fail if they are stale |
-| `just e2e <suite>` | Run one end-to-end suite with the extension loaded in Chrome for Testing |
-| `just eval` | Measure search quality against the baselines |
-| `just bench` | Run the benchmarks; fail if a perf limit is exceeded |
-| `just deny` | Check dependency licenses, security advisories, banned crates and sources |
-| `just guard` | Fail if tests, thresholds or snapshots were weakened |
+| `just setup` | Install development tools and dependencies |
+| `just dev` | Start the desktop app |
+| `just format` / `just check` | Format all files / check formatting |
+| `just lint` | Lint all files and type-check TypeScript |
+| `just format-<lang>` / `just check-<lang>` / `just lint-<lang>` | The same for `rust`, `ts` (also JSON, YAML and HTML) or `toml` |
+| `just test` | Run all tests |
+| `just e2e <suite>` | Run one end-to-end suite |
+| `just eval` | Evaluate search quality |
+| `just bench` | Run the benchmarks |
+| `just gen` / `just gen-check` | Generate schemas and types from `histrail-protocol` / check they are up to date |
+| `just deny` | Check dependency licenses and advisories |
+| `just guard` | Check that tests were not weakened |
 | `just verify` | Run check, lint, test, gen-check, deny and guard |
-| `just ready` | Format all files, then run `just verify` |
+| `just ready` | Run format, then verify |
 
 Finish with one `just verify` run; it must pass before any change is done, and
 it already covers the checks it lists, so do not run them separately as well.
