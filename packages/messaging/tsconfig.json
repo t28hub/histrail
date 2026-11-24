@@ -1,0 +1,7 @@
+{
+  "extends": "@histrail/tsconfig/library",
+  "compilerOptions": {
+    "rootDir": "src"
+  },
+  "include": ["src"]
+}
