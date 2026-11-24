@@ -82,7 +82,7 @@ lint-rust:
 [group('lint')]
 lint-ts:
     pnpm exec biome lint .
-    pnpm -r --include-workspace-root exec tsc --noEmit
+    pnpm -r --include-workspace-root typecheck
 
 # Lint TOML files
 [group('lint')]
