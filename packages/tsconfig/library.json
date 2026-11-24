@@ -1,0 +1,13 @@
+{
+  "$schema": "https://www.schemastore.org/tsconfig",
+  "extends": "@tsconfig/strictest/tsconfig.json",
+  "compilerOptions": {
+    "target": "es2023",
+    "lib": ["ES2023", "DOM"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "verbatimModuleSyntax": true,
+    "noEmit": true
+  }
+}
