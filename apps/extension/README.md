@@ -34,4 +34,7 @@ just setup
 
 ## Layout
 
-- [`src/entrypoints/`](src/entrypoints/): the background script and the popup.
+- [`src/entrypoints/`](src/entrypoints/): the background script, the capture content script and the popup.
+- [`src/capture/`](src/capture/): reading and validating the text of visited pages.
+- [`src/messages.ts`](src/messages.ts): every runtime message the extension sends, typed with `@histrail/messaging`.
+- [`src/platform/`](src/platform/): the only code that calls browser extension APIs.

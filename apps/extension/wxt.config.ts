@@ -8,6 +8,8 @@ export default defineConfig({
   manifest: ({ browser }) => ({
     name: 'Histrail',
     description: 'A local search engine for everything you’ve browsed.',
+    // Pages from private windows must never be captured.
+    incognito: 'not_allowed',
     ...(browser === 'chrome' && {
       minimum_chrome_version: '120',
     }),
