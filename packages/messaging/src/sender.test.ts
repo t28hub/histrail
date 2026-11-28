@@ -44,50 +44,50 @@ describe('toMessageSender', () => {
     });
   });
 
-  it.each<[string, RuntimeMessageSender]>([
-    [
-      'no extension ID',
-      {
+  it.each<{ name: string; sender: RuntimeMessageSender }>([
+    {
+      name: 'no extension ID',
+      sender: {
         url: 'https://example.com/article',
         frameId: 0,
         tab: { id: 7, incognito: false },
       },
-    ],
-    [
-      'no URL',
-      {
+    },
+    {
+      name: 'no URL',
+      sender: {
         id: 'histrail-test',
         frameId: 0,
         tab: { id: 7, incognito: false },
       },
-    ],
-    [
-      'a tab without an ID',
-      {
+    },
+    {
+      name: 'a tab without an ID',
+      sender: {
         id: 'histrail-test',
         url: 'https://example.com/article',
         frameId: 0,
         tab: { incognito: false },
       },
-    ],
-    [
-      'a devtools window',
-      {
+    },
+    {
+      name: 'a devtools window',
+      sender: {
         id: 'histrail-test',
         url: 'https://example.com/article',
         frameId: 0,
         tab: { id: -1, incognito: false },
       },
-    ],
-    [
-      'a tab without a frame ID',
-      {
+    },
+    {
+      name: 'a tab without a frame ID',
+      sender: {
         id: 'histrail-test',
         url: 'https://example.com/article',
         tab: { id: 7, incognito: false },
       },
-    ],
-  ])('rejects a sender with %s', (_, sender) => {
+    },
+  ])('rejects a sender with $name', ({ sender }) => {
     // Act
     const actual = toMessageSender(sender);
 

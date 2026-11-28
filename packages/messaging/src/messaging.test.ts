@@ -79,13 +79,6 @@ class FakeRuntime implements Runtime {
   }
 }
 
-const contentScript = {
-  id: 'histrail-test',
-  url: 'https://example.com/article',
-  frameId: 0,
-  tab: { id: 7, incognito: false },
-} as const satisfies RuntimeMessageSender;
-
 describe('defineMessaging', () => {
   let runtime: FakeRuntime;
 
@@ -124,6 +117,13 @@ describe('defineMessaging', () => {
     const handler = vi.fn();
     onMessage('greet', handler);
 
+    const contentScript: RuntimeMessageSender = {
+      id: 'histrail-test',
+      url: 'https://example.com/article',
+      frameId: 0,
+      tab: { id: 7, incognito: false },
+    };
+
     // Act
     runtime.deliver({ type: 'greet', data: { name: 'Alice' } }, contentScript);
 
@@ -142,6 +142,13 @@ describe('defineMessaging', () => {
     onMessage('greet', greet);
     onMessage('count', count);
 
+    const contentScript: RuntimeMessageSender = {
+      id: 'histrail-test',
+      url: 'https://example.com/article',
+      frameId: 0,
+      tab: { id: 7, incognito: false },
+    };
+
     // Act
     runtime.deliver({ type: 'count', data: 3 }, contentScript);
 
@@ -150,11 +157,33 @@ describe('defineMessaging', () => {
     expect(count).toHaveBeenCalledWith(3, expect.anything());
   });
 
-  it.each([
-    ['no envelope', { unrelated: true }, contentScript],
-    ['data its guard rejects', { type: 'greet', data: { name: 42 } }, contentScript],
-    ['an unidentifiable sender', { type: 'greet', data: { name: 'Alice' } }, {}],
-  ])('drops a message with %s', (_, message, sender) => {
+  it.each<{ name: string; message: unknown; sender: RuntimeMessageSender }>([
+    {
+      name: 'no envelope',
+      message: { unrelated: true },
+      sender: {
+        id: 'histrail-test',
+        url: 'https://example.com/article',
+        frameId: 0,
+        tab: { id: 7, incognito: false },
+      },
+    },
+    {
+      name: 'data its guard rejects',
+      message: { type: 'greet', data: { name: 42 } },
+      sender: {
+        id: 'histrail-test',
+        url: 'https://example.com/article',
+        frameId: 0,
+        tab: { id: 7, incognito: false },
+      },
+    },
+    {
+      name: 'an unidentifiable sender',
+      message: { type: 'greet', data: { name: 'Alice' } },
+      sender: {},
+    },
+  ])('drops a message with $name', ({ message, sender }) => {
     // Arrange
     const { onMessage } = defineMessaging<TestProtocol>(runtime, guards);
     const handler = vi.fn();
@@ -172,6 +201,13 @@ describe('defineMessaging', () => {
     const { onMessage } = defineMessaging<TestProtocol>(runtime, guards);
     const handler = vi.fn();
     const remove = onMessage('greet', handler);
+
+    const contentScript: RuntimeMessageSender = {
+      id: 'histrail-test',
+      url: 'https://example.com/article',
+      frameId: 0,
+      tab: { id: 7, incognito: false },
+    };
 
     // Act
     remove();

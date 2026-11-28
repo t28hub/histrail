@@ -24,12 +24,12 @@ describe('isEnvelope', () => {
   });
 
   it.each([
-    ['a non-object', 'greet'],
-    ['null', null],
-    ['a missing type', { data: 1 }],
-    ['a non-string type', { type: 1, data: 1 }],
-    ['missing data', { type: 'greet' }],
-  ])('rejects %s', (_, message) => {
+    { name: 'a non-object', message: 'greet' },
+    { name: 'null', message: null },
+    { name: 'a missing type', message: { data: 1 } },
+    { name: 'a non-string type', message: { type: 1, data: 1 } },
+    { name: 'missing data', message: { type: 'greet' } },
+  ])('rejects $name', ({ message }) => {
     // Act
     const actual = isEnvelope(message);
 
