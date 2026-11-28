@@ -44,6 +44,11 @@ export type RuntimeListener = (message: unknown, sender: RuntimeMessageSender) =
  */
 export interface Runtime {
   /**
+   * This extension's ID, the only sender whose messages are delivered.
+   */
+  readonly id: string;
+
+  /**
    * Sends `message` to the rest of the extension.
    *
    * @param message - The message, serializable by the browser.

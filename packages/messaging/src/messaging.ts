@@ -30,7 +30,7 @@ export interface Messaging<P> {
   sendMessage<T extends keyof P & string>(type: T, data: P[T]): Promise<void>;
 
   /**
-   * Calls `handler` for each message of `type` whose sender and data are valid.
+   * Calls `handler` for each message of `type` from this extension whose sender and data are valid.
    *
    * @typeParam T - The message type.
    * @param type - The message type to handle.
@@ -70,6 +70,10 @@ export function defineMessaging<P extends object>(
         const from = toMessageSender(sender);
         if (from === undefined) {
           console.debug('message dropped: unidentifiable sender');
+          return;
+        }
+        if (from.extensionId !== runtime.id) {
+          console.debug('message dropped: another extension');
           return;
         }
 

@@ -39,6 +39,10 @@ const guards = {
  */
 class FakeRuntime implements Runtime {
   /**
+   * The ID that senders must match, as in the tests' content scripts.
+   */
+  readonly id = 'histrail-test';
+  /**
    * Every message passed to {@link FakeRuntime.sendMessage}, in order.
    */
   readonly sent: unknown[] = [];
@@ -182,6 +186,16 @@ describe('defineMessaging', () => {
       name: 'an unidentifiable sender',
       message: { type: 'greet', data: { name: 'Alice' } },
       sender: {},
+    },
+    {
+      name: 'a sender from another extension',
+      message: { type: 'greet', data: { name: 'Alice' } },
+      sender: {
+        id: 'other-extension',
+        url: 'https://example.com/article',
+        frameId: 0,
+        tab: { id: 7, incognito: false },
+      },
     },
   ])('drops a message with $name', ({ message, sender }) => {
     // Arrange
