@@ -5,11 +5,13 @@ extension captures pages, a Rust desktop app (Tauri v2) stores and indexes
 them on the user's machine, and the GUI, the CLI and an MCP server search them.
 Nothing leaves the machine.
 
-> **Status: partially implemented.** The Cargo workspace includes
+> **Histrail is partially implemented.** The Cargo workspace includes
 > `histrail-protocol`, `histrail-core` and `histrail-desktop` (`apps/desktop/src-tauri`).
 > The pnpm workspace includes the root, the desktop frontend (`apps/desktop`),
-> the browser extension (`apps/extension`) and the shared TypeScript configs
-> (`packages/tsconfig`). `fixtures/` and `docs/` do not exist yet.
+> the browser extension (`apps/extension`), typed runtime messaging for browser
+> extensions (`packages/messaging`) and the shared TypeScript configs
+> (`packages/tsconfig`).
+> `fixtures/` and `docs/` do not exist yet.
 > The `.justfile` defines every recipe, but `gen`, `gen-check`, `e2e`, `eval`,
 > `bench` and `guard` fail with "not implemented yet" until their tooling exists,
 > so `just verify` cannot pass. The repository map below shows the target layout.
@@ -19,8 +21,8 @@ Nothing leaves the machine.
   first. `docs/design/` is an export. Do not edit it.
 - Ask instead of deciding when the task conflicts with the spec, needs a new
   permission or network access, or leaves open something visible outside the
-  crate or package: dependencies, formats, limits and defaults, public API,
-  CLI or UI behavior. Private names and structure are yours.
+  crate or package, such as dependencies, formats, limits and defaults, public
+  API, or CLI and UI behavior. Private names and structure are yours.
 - Ask with the options you compared and a recommendation based on official
   docs, ecosystem conventions and established open-source projects, and say
   which you checked. Record the answer in the PR's Notes.
@@ -51,7 +53,7 @@ Everything runs through `just`, and CI runs the same recipes.
 Finish with one `just verify` run. It must pass before any change is done, and
 it already covers the checks it lists, so do not run them separately as well.
 `main` is kept green, so a failure is yours to fix. Do not assume it was
-already there. Also run the check that covers what you touched:
+already there. Also run the check in this table that covers what you touched.
 
 | If you changed | Also run |
 |---|---|
@@ -64,24 +66,24 @@ While iterating, scope cargo to the crate you changed
 (`cargo nextest run -p histrail-store`,
 `cargo clippy -p histrail-store --all-targets -- -D warnings`). Run the whole
 workspace only after touching `histrail-protocol` or `histrail-core`.
-One test: `cargo nextest run -p histrail-index -E 'test(<name>)'`.
-TypeScript: `pnpm -C apps/extension test`, `pnpm -C apps/desktop test`,
-`pnpm -C packages/ui test`. Do not build with `--release` or `tauri build`
+Run one test with `cargo nextest run -p histrail-index -E 'test(<name>)'`.
+For TypeScript, run `pnpm -C apps/extension test`, `pnpm -C apps/desktop test`
+or `pnpm -C packages/ui test`. Do not build with `--release` or `tauri build`
 unless the task is about performance or packaging, because they are slow.
 
 ## Repository map
 
 ```
 crates/                Rust libraries and Rust-only binaries
-  protocol/            contract types: the single source of truth for every wire format
-  core/                domain: ingest, rules, search, delete. No transport code
+  protocol/            contract types, the single source of truth for every wire format
+  core/                domain logic for ingest, rules, search and delete, with no transport code
   store/               SQLite + sqlite-vec, the only crate that writes to the DB
   index/               Tantivy + Lindera (Japanese) + bigram fields
   embedding/           ONNX Runtime embeddings and model management
   extract/             page captures -> typed records (builtin, declarative, WASM)
   import/              bookmark and history importers
   rpc/ mcp/ http/      adapters over core
-  cli/                 published as `histrail`: the CLI and `histrail mcp`
+  cli/                 the CLI and `histrail mcp`, published as `histrail`
   proxy/               stateless Native Messaging relay
   eval/                search quality harness behind `just eval`
   test-support/        temp DBs, fixtures, fake clock (dev-dependency only)
@@ -92,6 +94,7 @@ apps/                  what users install
 packages/              npm packages used by apps (apps → ui → protocol)
   ui/                  @histrail/ui: UI components shared by the desktop UI and the extension
   protocol/            @histrail/protocol: generated from crates/protocol, never edit by hand
+  messaging/           @histrail/messaging: typed runtime messaging, with no dependencies
   tsconfig/            @histrail/tsconfig: TypeScript configs extended by every package
 fixtures/              synthetic pages, captures, imports, eval corpus
 ```
@@ -99,17 +102,17 @@ fixtures/              synthetic pages, captures, imports, eval corpus
 Package names are `histrail-<dir>` (`crates/store` → `histrail-store`),
 except `crates/cli`, which is `histrail`.
 
-Dependencies point one way: `protocol` ← `core` ← adapters (`rpc`, `mcp`, `http`,
-`cli`, `desktop`). `core` never depends on an adapter, and `proxy` depends
+Dependencies point one way, as in `protocol` ← `core` ← adapters (`rpc`, `mcp`,
+`http`, `cli`, `desktop`). `core` never depends on an adapter, and `proxy` depends
 only on `protocol`. External clients reach core only through RPC.
 
 ## Rules that break things if ignored
 
 - **Never write to stdout in `proxy` or `histrail mcp`.** stdout is the
   protocol channel. Log to stderr or the log file.
-- **Public contracts change additively.** JSON-RPC methods and fields,
-  Native Messaging frames and `--json` CLI output: removing or renaming needs
-  a protocol version bump. Adding a case to a WIT `variant` bumps the package
+- **Public contracts change additively.** Removing or renaming JSON-RPC
+  methods and fields, Native Messaging frames or `--json` CLI output needs a
+  protocol version bump. Adding a case to a WIT `variant` bumps the package
   version (`histrail:extractor@0.x.0`).
 - **Migrations are append-only.** Schema changes go in a new migration.
   Never edit an existing one.
@@ -144,10 +147,11 @@ only on `protocol`. External clients reach core only through RPC.
 ## TypeScript
 
 - pnpm, strict mode, vitest. Every package extends a config from `@histrail/tsconfig`.
+- Give every interface and class property a JSDoc.
 - Browser differences live only in `apps/extension/src/platform/`. Shared
   code does not call `chrome.*` or `browser.*` directly.
-- MV3: no remote code, no `eval`. New manifest or host permissions need
-  approval.
+- The MV3 extension runs no remote code and no `eval`. New manifest or host
+  permissions need approval.
 - The desktop UI talks to core only through the generated commands and types.
 - `packages/ui` is shared by both apps, so it never calls `chrome.*`, `browser.*`
   or Tauri APIs. Components get what they need through props.
@@ -163,6 +167,10 @@ only on `protocol`. External clients reach core only through RPC.
   baselines (`fixtures/eval/`) and the perf limits checked by `just bench` are
   set by humans, so do not edit them.
 - Tests never use the network or a real browser profile.
+- Structure every test as Arrange, Act and Assert, with one `// Arrange`,
+  `// Act` and `// Assert` comment each and a blank line between them. Leave
+  out `// Arrange` when there is nothing to set up, and split a test that
+  needs a second act into another test.
 
 ## Dependencies
 
@@ -176,13 +184,14 @@ only on `protocol`. External clients reach core only through RPC.
 - Change the lockfile only for the dependency you need
   (`cargo update -p <crate> --precise <version>`). Never update everything.
 
-## Comments and text
+## Comments and docs
 
-- Comments explain why: an invariant, a constraint, a non-obvious choice. Do
-  not restate what the code does.
+- Comments explain why, such as an invariant, a constraint or a non-obvious
+  choice, and never restate what the code does.
 - Write comments, docs and PR text for a reader who has not seen your
   session. Do not mention prompts, earlier attempts or reverted changes. The
-  PR's Task section is the one exception: it is the request, pasted as given.
+  PR's Task section is the one exception, since it is the request pasted as
+  given.
 
 ## Changes and PRs
 
@@ -194,9 +203,9 @@ only on `protocol`. External clients reach core only through RPC.
   "Suggested AGENTS.md additions" heading in the PR body. A rule earns its
   place when agents got the same thing wrong more than once.
 - PRs are squash-merged, so the PR title becomes the commit on `main`.
-  Titles follow Conventional Commits: `<type>(<scope>): <summary>`.
+  Titles follow Conventional Commits, as in `<type>(<scope>): <summary>`.
   CI rejects titles that do not match.
-    - Types: `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `build`, `ci`, `chore`.
+    - Types are `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `build`, `ci` and `chore`.
     - Scope is the directory name under `crates/`, `apps/` or `packages/`
       (`core`, `store`, `extension`, `ui`, ...). Omit it for repo-wide changes.
     - Summary is imperative and lowercase, with no trailing period.
