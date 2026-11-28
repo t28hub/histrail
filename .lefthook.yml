@@ -16,6 +16,13 @@ pre-commit:
       run: pnpm exec tombi format {staged_files}
       stage_fixed: true
 
+    - name: gitleaks
+      # Fail rather than skip, so a missing install never passes unchecked.
+      run: >-
+        command -v gitleaks >/dev/null
+        || { echo "gitleaks is not installed, see README.md#development" >&2; exit 1; }
+        && gitleaks git --pre-commit --staged --no-banner --redact --verbose
+
 commit-msg:
   jobs:
     - name: commitlint

@@ -23,6 +23,9 @@ just dev-desktop
 just dev-extension-chrome
 ```
 
+The pre-commit hook and `just verify` also run [Gitleaks](https://github.com/gitleaks/gitleaks) to catch leaked secrets.
+`just setup` does not install it, so install it with `brew install gitleaks` or from its [releases](https://github.com/gitleaks/gitleaks/releases).
+
 Run `just` to list all recipes.
 
 ## License

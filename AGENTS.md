@@ -46,8 +46,9 @@ Everything runs through `just`, and CI runs the same recipes.
 | `just bench` | Run the benchmarks |
 | `just gen` / `just gen-check` | Generate schemas and types from `histrail-protocol` / check they are up to date |
 | `just deny` | Check dependency licenses and advisories |
+| `just leaks` | Check every commit for leaked secrets |
 | `just guard` | Check that tests were not weakened |
-| `just verify` | Run check, lint, test, gen-check, deny and guard |
+| `just verify` | Run check, lint, test, gen-check, deny, leaks and guard |
 | `just ready` | Run format, then verify |
 
 Finish with one `just verify` run. It must pass before any change is done, and

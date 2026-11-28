@@ -128,13 +128,18 @@ bench: (_todo "bench")
 deny:
     cargo deny check
 
+# Check every commit for leaked secrets
+[group('ci')]
+leaks:
+    gitleaks git --no-banner --redact --verbose
+
 # Check that tests were not weakened
 [group('ci')]
 guard: (_todo "guard")
 
 # Run all checks
 [group('ci')]
-verify: check lint test gen-check deny guard
+verify: check lint test gen-check deny leaks guard
 
 # Format all files and run all checks
 [group('ci')]

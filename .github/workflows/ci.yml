@@ -102,3 +102,36 @@ jobs:
 
       - name: Check dependency licenses and advisories
         run: just deny
+
+  check-leaks:
+    name: check | leaks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GITLEAKS_VERSION: 8.30.1
+      # From gitleaks_8.30.1_checksums.txt in the release, matching the digest GitHub records.
+      GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+          # Every commit is scanned, not only the tip.
+          fetch-depth: 0
+      - name: Install just
+        uses: taiki-e/install-action@v2.90.5
+        with:
+          tool: just@${{ env.JUST_VERSION }}
+      - name: Install Gitleaks
+        working-directory: ${{ runner.temp }}
+        run: |
+          archive="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          curl --fail --silent --show-error --location --remote-name \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/${archive}"
+          echo "${GITLEAKS_SHA256}  ${archive}" | sha256sum --check --strict
+          mkdir gitleaks
+          tar --extract --gzip --file "${archive}" --directory gitleaks gitleaks
+          echo "${RUNNER_TEMP}/gitleaks" >> "${GITHUB_PATH}"
+
+      - name: Check for leaked secrets
+        run: just leaks
